@@ -11,19 +11,19 @@ A commandline interface to https://www.turnitin.com
 
 ## Courses
 
-![view of courses](img/courses.png)
+![view of courses](https://raw.githubusercontent.com/r2dev2bb8/Turnitin-CLI/master/img/courses.png)
 
 ## Assignments
 
-![view of assignments](img/assignments.png)
+![view of assignments](https://raw.githubusercontent.com/r2dev2bb8/Turnitin-CLI/master/img/assignments.png)
 
 ## Downloading an Assignment
 
-![view of downloading interface](img/download.png)
+![view of downloading interface](https://raw.githubusercontent.com/r2dev2bb8/Turnitin-CLI/master/img/download.png)
 
 ## Submitting an Assignment
 
-![view of submitting interface](img/submitting.png)
+![view of submitting interface](https://raw.githubusercontent.com/r2dev2bb8/Turnitin-CLI/master/img/submitting.png)
 
 # Setup
 
