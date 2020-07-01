@@ -1,6 +1,7 @@
 import curses
 from curses.textpad import Textbox, rectangle
 import os
+import sys
 
 from turnitin_cli.core import login, get_courses, get_assignments, submit, download, parser
 
@@ -9,8 +10,9 @@ down = parser["keybindings"]["menu_down"]
 
 
 def log(*msg):
-    with open("log", 'a+') as fout:
-        print(*msg, file=fout, flush=True)
+    if "--debug" in sys.argv:
+        with open("log", 'a+') as fout:
+            print(*msg, file=fout, flush=True)
 
 class Menu:
     def __init__(self, options, previous=exit):
@@ -27,8 +29,8 @@ class Menu:
         self.current_frame = Frame(0, 12)
 
         self.actions = {
-            up: self.move_down,
-            down: self.move_up,
+            down: self.move_down,
+            up: self.move_up,
             'b': previous,
             parser["keybindings"]["quit"]: exit
         }
