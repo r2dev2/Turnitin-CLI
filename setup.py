@@ -18,7 +18,7 @@ except:
 
 setuptools.setup(
     name="turnitin-cli",
-    version="1.0",
+    version="1.3.0",
     author="Ronak Badhe",
     author_email="ronak.badhe@gmail.com",
     description=long_description.split("\n")[1],

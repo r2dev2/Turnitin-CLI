@@ -3,6 +3,25 @@ from getpass import getpass
 import json
 from pathlib import Path
 import requests
+import shutil
+
+try:
+    open(Path.home() / "tiiconfig.ini", 'r').close()
+except:
+    with open(Path.home() / "tiiconfig.ini", 'w+') as fout:
+        fout.write(
+                """
+[keybindings]
+menu_up = ,
+menu_down = .
+quit = q
+
+[login]
+username = example@example.com
+password = password
+"""
+        )
+
 
 parser = configparser.ConfigParser()
 parser.read(Path.home() / "tiiconfig.ini")
@@ -14,7 +33,7 @@ PASSWORD = parser["login"]["password"]
 
 if USERNAME == "example@example.com":
     parser["login"]["username"] = input("What is your username? ")
-    parser["login"]["password"] = getpass("What is your password (input hidden for security?\n")
+    parser["login"]["password"] = getpass("What is your password (input hidden for security)?\n")
     print("The configuration file is at", Path.home() / "tiiconfig.ini")
     print("Default keybindings:")
     for v in ("menu_up", "menu_down", "quit"):

@@ -2,7 +2,7 @@ import curses
 from curses.textpad import Textbox, rectangle
 import os
 
-from core import login, get_courses, get_assignments, submit, download, parser
+from turnitin_cli.core import login, get_courses, get_assignments, submit, download, parser
 
 up = parser["keybindings"]["menu_up"]
 down = parser["keybindings"]["menu_down"]
