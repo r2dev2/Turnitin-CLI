@@ -2,4 +2,6 @@ __pycache__/
 turnitin_cli.egg-info/
 build/
 dist/
+*.log
+*.lock
 
