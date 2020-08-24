@@ -8,25 +8,32 @@ from turnitin_cli.core import login, get_courses, get_assignments, submit, downl
 up = parser["keybindings"]["menu_up"]
 down = parser["keybindings"]["menu_down"]
 
+width, height = os.get_terminal_size()
+
 
 def log(*msg):
     if "--debug" in sys.argv:
         with open("log", 'a+') as fout:
             print(*msg, file=fout, flush=True)
 
+
 class Menu:
     def __init__(self, options, previous=exit):
+        self.width, self.height = width, height
+        self.vnum = self.height // 2
         self.amount = len(options)
         self.options = options
         newamount = 0
-        if self.amount % 13 != 0:
-            newamount = 13-self.amount%13
+        if self.amount % (self.vnum+1) != 0:
+            newamount = (self.vnum+1)-self.amount%(self.vnum+1)
             self.options.extend(['']*newamount)
-        self.scr = curses.newpad((self.amount+newamount)*2, 1000)
+        self.pw = (self.amount+newamount)*2
+        self.py = 1000
+        self.scr = curses.newpad(self.pw, self.py)
         self.to_remove = None
         self.in_focus = 0
         self.update_scr()
-        self.current_frame = Frame(0, 12)
+        self.current_frame = Frame(0, self.vnum, self.vnum)
 
         self.actions = {
             down: self.move_down,
@@ -45,7 +52,8 @@ class Menu:
         else:
             self.current_frame = self.current_frame.next(num/2)
             log("Changing frame")
-        self.scr.refresh(self.current_frame.beg*2, 0, 0, 0, 24, 100)
+        log(self.pw, self.py, self.width, self.height)
+        self.scr.refresh(self.current_frame.beg*2, 0, 0, 0, self.height-1, self.width-1)
 
     def move_up(self):
         self.to_remove = self.in_focus
@@ -92,15 +100,16 @@ class Menu:
             self.scr.addstr(2*j, 0, str(self.options[j]))
 
 class Frame:
-    def __init__(self, beg, end):
+    def __init__(self, beg, end, delta):
         self.beg = beg
         self.end = end
+        self.delta = delta
 
     def forward(self):
-        return Frame(self.beg+12, self.end+12)
+        return Frame(self.beg+self.delta, self.end+self.delta, self.delta)
 
     def previous(self):
-        return Frame(self.beg-12, self.end-12)
+        return Frame(self.beg-self.delta, self.end-self.delta, self.delta)
 
     def next(self, other):
         if other > self.end:
@@ -130,7 +139,7 @@ class Course(Represent):
 class Assignment(Represent):
     def __str__(self):
         v = self.value
-        return (f'{expand_string(v["title"], 50)}  Due: {v["dates"]["due"][:-3]:5}  '
+        return (f'{expand_string(v["title"], width-50)}  Due: {v["dates"]["due"][:-3]:5}  '
                 f'Completed: {v["submission"]=="javascript:void(0);"}')
 
 
@@ -240,11 +249,6 @@ def main(stdscr):
         stdscr.refresh()
         stdscr.getkey()
 
-        # k = None
-        # while k != 'q':
-        #     k = stdscr.getkey()
-        #     stdscr.addstr(k)
-        #     stdscr.refresh()
     except KeyboardInterrupt:
         pass
 
